@@ -24,3 +24,47 @@ void send2displays(unsigned char value){
 	}
 	flag = !flag;
 }
+//using UART1
+
+void config_UART1(int baudrate, char paridade, int stop){
+
+	if((baudrate < 600) || (baudrate > 115200) || ((paridade != 'N') && (paridade != 'E') && (paridade != 'O')) || ((stop != 1)&& (stop != 2)) ){
+		//change to default
+		U1BRG =( 20000000 / (16 * 115200)); 
+		U1MODEbits.PDSEL = 0;
+		U1MODEbits.STSEL = 0;
+	}
+
+	else{
+		U1BRG =( 20000000 / (16 * baudrate)); 
+		
+		if(paridade == 'N'){
+			U1MODEbits.PDSEL = 0;
+		}
+		else if(paridade == 'E'){
+			U1MODEbits.PDSEL = 1;
+		}
+		else if(paridade == 'O'){
+			U1MODEbits.PDSEL = 2;
+		}
+
+		if(stop == 1){
+			U1MODEbits.STSEL = 0;
+		}
+		else if(stop == 2){
+			U1MODEbits.STSEL = 1;
+		}
+	}
+}
+
+void put_char(char byte2send){
+	while(U1STAbits.UTXBF == 1)
+		;
+	U1TXREG = byte2send;
+}
+
+void put_string(char *str){
+	for(;*str != '\0'; str++){
+		put_char(*str);
+	}
+}
