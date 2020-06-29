@@ -11,12 +11,12 @@ void UART2Interrupts(void){
 
 int main(void){
 	config_UART2(115200,'N',1);
-	UART1Interrupts();
+	UART2Interrupts();
 	EnableInterrupts();
 	while(1);
 }
 
-void _int_(24) isr_uart1(void){
-	put_char(U1RXREG);
+void _int_(32) isr_uart2(void){
+	put_char(U2RXREG);
 	IFS1bits.U2RXIF = 0;	
 }
