@@ -1,0 +1,175 @@
+TESTE AC1
+
+1)
+	a) 6bytes 
+
+	b) 10010000 + 6 + 2 = 10010008 
+
+	c) 20/4 = 5 (cada int ocupa uma word)
+
+	d) 10010014 (quarto elemento do array)
+
+	e) 28
+
+	f) L1 = 0x00400014
+	   L2 = 0x00400034
+
+	g) 4 vezes
+
+	h) 6
+
+	i) 0xC
+
+	j) 10010018
+
+
+2)
+
+#N = 5
+
+		.data
+
+arr_a	.space 20
+arr_b	.space 20
+		.eqv read_int x
+		.eqv print_int y
+
+		.text
+		.globl main
+
+
+main:
+		li $t0,0 		#n_even = 0
+		li $t1,0 		#n_odd	 = 0
+		la $t2,arr_a 	#$t2 = p1   p1 = &arr_a
+		la $t3,arr_b	#$t3 = p2   p2 = &arr_b
+		addi $t4,$t2,N  # aux = a + N
+for1:	
+		bge $t2,$t4,end_for1
+		
+		li $v0,read_int
+		syscall
+
+		sw $v0,0($t2)
+		add $t2,$t2,4
+		j for1
+
+end_for1:
+
+		la $t2,arr_a 	#$t2 = p1   p1 = &arr_a
+		la $t3,arr_b	#$t3 = p2   p2 = &arr_b
+for2:
+		bge $t2,$t4,end_for2
+		lw	$t5,0($t2)
+		rem $t5,$t5,2
+
+if:		beqz $t5,else
+		lw $t5,0($t2)
+		sw $t5,0($t3)
+		addi $t3,$t3,4
+		addi $t1,$t1,1
+		j endif
+else:
+		addi $t0,$t0,1
+endif:
+		addi $t2,$t2,4
+		j for2
+
+end_for2:
+
+		la $t3,arr_b
+		addi $t5,$t3,$t1
+for3:	
+		bge $t3,$t5,end_for3
+		lw $t6,0($t3)
+		move $a0,$t6
+		li $v0,print_int
+		syscall
+		addi $t3,$t3,4
+		j for3
+
+end_for3:
+		j $ra
+
+
+3)
+
+		.data
+
+val:	.word 8,4,15,-1987,327,-9,27,16
+str1:	.asciiz "Result is: "
+		.align 2
+		.eqv SIZE,8
+		.eqv print_string,?
+		.eqv print_int
+		.eqv print_char
+
+		.text
+		# $t0 i
+		# $t1 v
+		# $t2 SIZE/2
+		# $t3 ix4
+		# $t4 i + SIZE/2
+		# $t5 address
+		# $t6 address_mod
+		# $t7 aux
+		
+		.globl main
+main:
+		li $t0,0
+		la $t5,val
+		srl $t2,SIZE,1 #SIZE/2
+
+do:		
+		sll $t3,$t0,2
+		add $t6,$t5,$t3
+		lw $t1,0($t6) #v = val[i]
+
+		add $t4,$t0,$t2
+		add $t6,$t5,$t4
+		lw $t7,0($t6)
+		add $t6,$t5,$$t0
+		sw $t7,0($t6) #val[i] = val[i+SIZE/2]; 
+
+		add $t6,$t5,$t4
+		sw $t1,0($t6) #val[i+SIZE/2] = v;
+
+		addi $t0,$t0,1
+	
+while:	bge $t0,$t2,do
+
+		la $a0,str1
+		li $v0,print_string
+		li $t0,0
+do2:
+		sll	$t3,$t0,2
+
+		add $t6,$t5,$t3
+		lw  $a0,0($t6)
+		li  $v0,print_int
+		syscall
+
+		li $a0,','
+		li $v0,print_char
+		syscall
+
+while:	bge $t0,SIZE,do2
+		
+		jr $ra
+
+4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+

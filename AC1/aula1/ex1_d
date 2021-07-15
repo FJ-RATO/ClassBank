@@ -1,0 +1,6 @@
+Endereço de memória      Código máquina           Instrução
+0x00400050               0x34080003               ori $t0,$0,3
+0x00400054				 0x340A0008				  ori $2,$t0,8
+0x00400058				 0x01084820				  add $t1,$t0,$t0
+0x0040005C				 0x012A4820				  add $t1,$t1,$t2
+0x00400060				 0x03E00008				  jr $ra
