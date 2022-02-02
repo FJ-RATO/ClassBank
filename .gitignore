@@ -1,0 +1,4 @@
+#ignore generated documentation
+./SO/sofs21-so-3g2/doc/html
+./SO/training_exercise/original/doc
+./SO/training_exercise/src/doc
